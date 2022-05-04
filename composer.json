@@ -1,0 +1,39 @@
+{
+    "name": "coolycow/laravel-dadata",
+    "description": "Dadata API client (https://dadata.ru)",
+    "keywords": ["laravel", "dadata", "autocomplete"],
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Kulikov",
+            "email": "coolycow.com@gmail.com",
+            "homepage": "https://coolycow.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": ">=6.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Coolycow\\Dadata\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel":{
+            "providers": [
+                "Coolycow\\Dadata\\DadataServiceProvider"
+            ],
+            "aliases": {
+                "DadataSuggest": "Coolycow\\Dadata\\Facades\\DadataSuggest",
+                "DadataClean": "Coolycow\\Dadata\\Facades\\DadataClean"
+            }
+        }
+    }
+}
