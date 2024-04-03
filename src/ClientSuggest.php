@@ -175,7 +175,7 @@ class ClientSuggest
      * @param string $method
      * @return mixed
      */
-    private function query($url, array $params = [], $method = self::METHOD_POST)
+    protected function query($url, array $params = [], $method = self::METHOD_POST)
     {
 
         if (empty($params['query'])) {
@@ -246,5 +246,19 @@ class ClientSuggest
     public function suggest($type, $fields)
     {
         return $this->query("{$this->base_url}/{$this->version}/{$this->url_suggestions}/$type", $fields);
+    }
+
+    /**
+     * Подсказки по URL.
+     *
+     * @link https://dadata.ru/api/suggest/
+     * @param string $url
+     * @param string $type
+     * @param array  $fields
+     * @return bool|mixed|string
+     */
+    public function suggestByURL($url, $type, $fields)
+    {
+        return $this->query("$url/$type", $fields);
     }
 }
