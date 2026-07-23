@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 class Passport extends AbstractResponse
@@ -7,40 +9,40 @@ class Passport extends AbstractResponse
     /**
      * Действующий паспорт.
      */
-    const QC_OK = 0;
+    public const QC_OK = 0;
 
     /**
      * Неправильный формат серии или номера.
      */
-    const QC_WRONG_FORMAT = 1;
+    public const QC_WRONG_FORMAT = 1;
 
     /**
      * Исходное значение пустое.
      */
-    const QC_EMPTY_SOURCE = 2;
+    public const QC_EMPTY_SOURCE = 2;
 
     /**
      * Недействительный паспорт.
      */
-    const QC_INVALID = 10;
-    
-    /**
-     * @var string Исходная серия и номер одной строкой.
-     */
-    public $source;
-    
-    /**
-     * @var string Серия.
-     */
-    public $series;
-    
-    /**
-     * @var string Номер.
-     */
-    public $number;
+    public const QC_INVALID = 10;
 
-    public function __toString()
+    /**
+     * @var string|null Исходная серия и номер одной строкой.
+     */
+    public ?string $source = null;
+
+    /**
+     * @var string|null Серия.
+     */
+    public ?string $series = null;
+
+    /**
+     * @var string|null Номер.
+     */
+    public ?string $number = null;
+
+    public function __toString(): string
     {
-        return implode(' ', [$this->series, $this->number]);
+        return trim(implode(' ', array_filter([$this->series, $this->number], static fn ($v) => $v !== null && $v !== '')));
     }
 }

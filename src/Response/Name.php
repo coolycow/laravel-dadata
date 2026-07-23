@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 class Name extends AbstractResponse
@@ -7,79 +9,79 @@ class Name extends AbstractResponse
     /**
      * Исходное значение распознано уверенно.
      */
-    const QC_OK = 0;
+    public const QC_OK = 0;
 
     /**
      * Исходное значение распознано с допущениями или не распознано.
      */
-    const QC_INVALID = 1;
+    public const QC_INVALID = 1;
 
     /**
      * Исходное значение пустое или заведомо «мусорное».
      */
-    const QC_EMPTY = 2;
+    public const QC_EMPTY = 2;
 
     /**
      * Пол мужской.
      */
-    const GENDER_MALE = 'М';
+    public const GENDER_MALE = 'М';
 
     /**
      * Пол женский.
      */
-    const GENDER_FEMALE = 'Ж';
+    public const GENDER_FEMALE = 'Ж';
 
     /**
      * Пол не удалось однозначно определить.
      */
-    const GENDER_UNKNOWN = 'НД';
+    public const GENDER_UNKNOWN = 'НД';
 
     /**
-     * @var string Исходные ФИО одной строкой.
+     * @var string|null Исходные ФИО одной строкой.
      */
-    public $source;
-    
-    /**
-     * @var string Стандартизованные ФИО одной строкой.
-     */
-    public $result;
-    
-    /**
-     * @var string ФИО в родительном падеже (кого?).
-     */
-    public $result_genitive;
-    
-    /**
-     * @var string ФИО в дательном падеже (кому?).
-     */
-    public $result_dative;
-    
-    /**
-     * @var string ФИО в творительном падеже (кем?).
-     */
-    public $result_ablative;
-    
-    /**
-     * @var string Фамилия.
-     */
-    public $surname;
-    
-    /**
-     * @var string Имя.
-     */
-    public $name;
-    
-    /**
-     * @var string Отчество.
-     */
-    public $patronymic;
-    
-    /**
-     * @var string Пол (see GENDER_* constants).
-     */
-    public $gender;
+    public ?string $source = null;
 
-    public function __toString()
+    /**
+     * @var string|null Стандартизованные ФИО одной строкой.
+     */
+    public ?string $result = null;
+
+    /**
+     * @var string|null ФИО в родительном падеже (кого?).
+     */
+    public ?string $result_genitive = null;
+
+    /**
+     * @var string|null ФИО в дательном падеже (кому?).
+     */
+    public ?string $result_dative = null;
+
+    /**
+     * @var string|null ФИО в творительном падеже (кем?).
+     */
+    public ?string $result_ablative = null;
+
+    /**
+     * @var string|null Фамилия.
+     */
+    public ?string $surname = null;
+
+    /**
+     * @var string|null Имя.
+     */
+    public ?string $name = null;
+
+    /**
+     * @var string|null Отчество.
+     */
+    public ?string $patronymic = null;
+
+    /**
+     * @var string|null Пол (see GENDER_* constants).
+     */
+    public ?string $gender = null;
+
+    public function __toString(): string
     {
         return (string) $this->result;
     }

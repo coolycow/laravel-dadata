@@ -1,103 +1,105 @@
 # Laravel DaData
 
-Пакет работы с сервисом [DaData.ru](https://dadata.ru).
+Пакет для работы с [DaData.ru](https://dadata.ru) в Laravel 10–13 (PHP 8.2+; для Laravel 13 нужен PHP 8.3+).
 
-Dadata - сервис автоматической проверки и исправления контактных данных: ФИО, адреса, телефоны, email, паспорта и реквизиты компаний.
+DaData — сервис автоматической проверки и исправления контактных данных: ФИО, адреса, телефоны, email, паспорта и реквизиты компаний.
+
+## Требования
+
+- PHP `^8.2` (Laravel 13 — PHP `^8.3`)
+- Laravel / Illuminate `^10|^11|^12|^13`
+- Guzzle `^7.8`
 
 ## Установка
-Запустить:
+
 ```bash
-composer require "coolycow/laravel-dadata"
-```
----
-
-__Для Laravel < 5.5:__
-Зарегистрировать service-provider в config/app.php:
-```php
-  Coolycow\Dadata\DadataServiceProvider::class,
+composer require coolycow/laravel-dadata
 ```
 
-Для Lumen добавить в bootstrap/app.php:
-```php
-$app->withFacades();
-```
----
+Опубликовать конфиг:
 
-Опубликовать конфиг: 
 ```bash
 php artisan vendor:publish --provider="Coolycow\Dadata\DadataServiceProvider"
 ```
 
-Задать токен (и ключ для API стандартизации) в `config/dadata.php` или `.env`
-```php
-    'token' => env('DADATA_TOKEN', ''),
-    'secret' => env('DADATA_SECRET', ''),
+Задать ключи в `.env`:
+
+```env
+DADATA_TOKEN=your_token
+DADATA_SECRET=your_secret
 ```
+
+`DADATA_SECRET` нужен для API стандартизации (Clean). Для Suggest достаточно токена.
 
 ## Использование
-### Сервис подсказок (https://dadata.ru/api/suggest/)
-API подсказок помогает человеку быстро ввести корректные данные. Подсказывает ФИО, email, почтовые адреса, реквизиты компаний и банков, и другие справочники.
 
-Добавить в необходимый клас фасад:
+### Подсказки (Suggest)
+
 ```php
 use Coolycow\Dadata\Facades\DadataSuggest;
+
+// Всегда возвращает list<array> (пустой список, если совпадений нет)
+$result = DadataSuggest::suggest('address', ['query' => 'Москва', 'count' => 2]);
+
+$party = DadataSuggest::partyById('7707083893', ['branch_type' => 'MAIN']);
 ```
 
-#### Пример использование метода с параметрами:
-```php
-$result = DadataSuggest::suggest("address", ["query"=>"Москва", "count"=>2]);
-print_r($result);
-```
-Первым параметром может быть: `fio, address, party, email, bank`
+Типы: `fio`, `address`, `party`, `email`, `bank` и другие справочники DaData.
 
-#### Пример использование [поиска по ИНН или ОГРН](https://dadata.ru/api/find-party/) с параметрами:
-```php
-$result = DadataSuggest::partyById('5077746329876', ["branch_type"=>"MAIN"]);
-print_r($result);
-```
-Первым параметром может быть ИНН, ОГРН или Dadata HID
+### Стандартизация (Clean)
 
-### Сервис стандартизации (https://dadata.ru/api/clean/)
-API стандартизации приводит в порядок и обогащает дополнительной информацией почтовые адреса, телефоны, паспорта, ФИО и email.
-
-Добавить в клас фасад:
 ```php
 use Coolycow\Dadata\Facades\DadataClean;
+
+$address = DadataClean::cleanAddress('мск сухонска 11/-89');
+$phone = DadataClean::cleanPhone('тел 7165219 доб139');
+$passport = DadataClean::cleanPassport('4509 235857');
+$name = DadataClean::cleanName('Срегей владимерович иванов');
+$email = DadataClean::cleanEmail('serega@yandex/ru');
+$date = DadataClean::cleanDate('24/3/12');
+$vehicle = DadataClean::cleanVehicle('форд фокус');
+
+$balance = DadataClean::getBalance();
+$stats = DadataClean::getStatistics();
+$stats = DadataClean::getStatistics('2022-12-01');
+
+$byIp = DadataClean::detectAddressByIp('8.8.8.8'); // Address|null
 ```
 
-Использовать методы: 
+### DI без фасадов
+
 ```php
-$response = DadataClean::cleanAddress('мск сухонска 11/-89');
-$response = DadataClean::cleanPhone('тел 7165219 доб139');
-$response = DadataClean::cleanPassport('4509 235857');
-$response = DadataClean::cleanName('Срегей владимерович иванов');
-$response = DadataClean::cleanEmail('serega@yandex/ru');
-$response = DadataClean::cleanDate('24/3/12');
-$response = DadataClean::cleanVehicle('форд фокус');
-$response = DadataClean::getStatistics();
-$response = DadataClean::getStatistics(now()->subDays(6));
-print_r($response);
+use Coolycow\Dadata\ClientClean;
+use Coolycow\Dadata\ClientSuggest;
+
+public function __construct(
+    private ClientSuggest $suggest,
+    private ClientClean $clean,
+) {}
 ```
 
-### Проверка баланса системы
-```php
-$response = DadataClean::getBalance();
+Клиенты зарегистрированы как singleton и принимают `ClientInterface` в конструкторе — удобно для тестов.
+
+### Исключения
+
+| Класс | Когда |
+|-------|--------|
+| `Coolycow\Dadata\Exception\AuthenticationException` | нет/неверный токен или secret, HTTP 401/403 |
+| `Coolycow\Dadata\Exception\RequestException` | пустой запрос, HTTP 400/404/405/413 |
+| `Coolycow\Dadata\Exception\RateLimitException` | HTTP 429 |
+| `Coolycow\Dadata\Exception\ServerException` | HTTP 500 |
+| `Coolycow\Dadata\Exception\DadataException` | прочие ошибки транспорта/парсинга |
+
+## Разработка
+
+```bash
+composer install
+composer test
+composer phpstan
 ```
 
-### Получение статистики использования сервиса
-#### На текущий день
-```php
-$response = DadataClean::getStatistics();
-```
+## Ссылки
 
-#### На любую другую дату
-```php
-$response = DadataClean::getStatistics(now()->subDays(6));
-// or
-$response = DadataClean::getStatistics('2022-12-01');
-```
-
-## Ссылки, документация, API:
 - https://dadata.ru
 - https://dadata.ru/api
 - https://github.com/gietos/dadata

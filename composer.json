@@ -1,8 +1,8 @@
 {
     "name": "coolycow/laravel-dadata",
-    "description": "Dadata API client (https://dadata.ru)",
-    "keywords": ["laravel", "dadata", "autocomplete"],
-    "type": "package",
+    "description": "Dadata API client for Laravel (https://dadata.ru)",
+    "keywords": ["laravel", "dadata", "autocomplete", "suggest", "clean"],
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -12,10 +12,15 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": "^8.2",
         "ext-json": "*",
-        "ext-curl": "*",
-        "guzzlehttp/guzzle": ">=6.2.0"
+        "guzzlehttp/guzzle": "^7.8",
+        "illuminate/support": "^10.0|^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^10.5|^11.0|^12.0"
     },
     "autoload": {
         "psr-4": {
@@ -25,8 +30,13 @@
             "src/helpers.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Coolycow\\Dadata\\Tests\\": "tests"
+        }
+    },
     "extra": {
-        "laravel":{
+        "laravel": {
             "providers": [
                 "Coolycow\\Dadata\\DadataServiceProvider"
             ],
@@ -35,5 +45,17 @@
                 "DadataClean": "Coolycow\\Dadata\\Facades\\DadataClean"
             }
         }
-    }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpstan": "phpstan analyse --memory-limit=512M"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

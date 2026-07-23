@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 abstract class AbstractResponse
 {
     /**
-     * @var string Исходная строка.
+     * @var string|null Исходная строка.
      */
-    public $source;
+    public ?string $source = null;
 
     /**
-     * @var integer Код качества (see QC_* constants).
+     * @var int|null Код качества (see QC_* constants).
      */
-    public $qc;
+    public ?int $qc = null;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 class Phone extends AbstractResponse
@@ -7,94 +9,94 @@ class Phone extends AbstractResponse
     /**
      * Телефон распознан уверенно.
      */
-    const QC_OK = 0;
-
-    /**
-     * Телефон пустой или заведомо «мусорный».
-     */
-    const QC_EMPTY = 2;
+    public const QC_OK = 0;
 
     /**
      * Телефон распознан с допущениями или не распознан.
      */
-    const QC_INVALID = 1;
+    public const QC_INVALID = 1;
+
+    /**
+     * Телефон пустой или заведомо «мусорный».
+     */
+    public const QC_EMPTY = 2;
 
     /**
      * Обнаружено несколько телефонов, распознан первый.
      */
-    const QC_MULTIPLE = 3;
+    public const QC_MULTIPLE = 3;
 
     /**
      * Телефон соответствует адресу.
      */
-    const QC_CONFLICT_OK = 0;
+    public const QC_CONFLICT_OK = 0;
 
     /**
      * Города адреса и телефона отличаются.
      */
-    const QC_CITY_MISMATCH = 2;
+    public const QC_CITY_MISMATCH = 2;
 
     /**
      * Регионы адреса и телефона отличаются.
      */
-    const QC_REGION_MISMATCH = 3;
+    public const QC_REGION_MISMATCH = 3;
 
     /**
-     * @var string Исходный телефон одной строкой.
+     * @var string|null Исходный телефон одной строкой.
      */
-    public $source;
+    public ?string $source = null;
 
     /**
-     * @var string Тип телефона.
+     * @var string|null Тип телефона.
      */
-    public $type;
+    public ?string $type = null;
 
     /**
-     * @var string Стандартизованный телефон одной строкой.
+     * @var string|null Стандартизованный телефон одной строкой.
      */
-    public $phone;
+    public ?string $phone = null;
 
     /**
-     * @var integer Код страны.
+     * @var string|null Код страны.
      */
-    public $country_code;
+    public ?string $country_code = null;
 
     /**
-     * @var integer Код города / DEF-код.
+     * @var string|null Код города / DEF-код.
      */
-    public $city_code;
+    public ?string $city_code = null;
 
     /**
-     * @var integer Локальный номер телефона.
+     * @var string|null Локальный номер телефона.
      */
-    public $number;
+    public ?string $number = null;
 
     /**
-     * @var string Добавочный номер.
+     * @var string|null Добавочный номер.
      */
-    public $extension;
+    public ?string $extension = null;
 
     /**
-     * @var string Оператор связи.
+     * @var string|null Оператор связи.
      */
-    public $provider;
+    public ?string $provider = null;
 
     /**
-     * @var string Регион.
+     * @var string|null Регион.
      */
-    public $region;
+    public ?string $region = null;
 
     /**
-     * @var string Часовой пояс.
+     * @var string|null Часовой пояс.
      */
-    public $timezone;
+    public ?string $timezone = null;
 
     /**
-     * @var integer Признак конфликта телефона с адресом (see QC_CONFLICT_* constants).
+     * @var int|null Признак конфликта телефона с адресом (see QC_CONFLICT_* constants).
      */
-    public $qc_conflict;
+    public ?int $qc_conflict = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->phone;
     }

@@ -1,33 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 /**
- * Агрегированная статистика
- *
- * @package Coolycow\Dadata\Response
+ * Агрегированная статистика.
  */
 class StatisticServices
 {
-
     /**
      * Поиск дублей.
-     *
-     * @var int
      */
-    public $merging = 0;
+    public int $merging = 0;
 
     /**
      * Подсказки.
-     *
-     * @var int
      */
-    public $suggestions = 0;
+    public int $suggestions = 0;
 
     /**
      * Стандартизация.
-     *
-     * @var int
      */
-    public $clean = 0;
+    public int $clean = 0;
 }

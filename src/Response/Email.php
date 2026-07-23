@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 class Email extends AbstractResponse
@@ -9,41 +11,41 @@ class Email extends AbstractResponse
      * Соответствует общепринятым правилам,
      * реальное существование адреса не проверяется.
      */
-    const QC_OK = 0;
+    public const QC_OK = 0;
 
     /**
      * Некорректное значение.
      * Не соответствует общепринятым правилам.
      */
-    const QC_INVALID = 1;
+    public const QC_INVALID = 1;
 
     /**
      * Пустое или заведомо «мусорное» значение.
      */
-    const QC_EMPTY = 2;
+    public const QC_EMPTY = 2;
 
     /**
      * «Одноразовый» адрес.
      * Домены 10minutemail.com, getairmail.com, temp-mail.ru и аналогичные.
      */
-    const QC_DISPOSABLE = 3;
+    public const QC_DISPOSABLE = 3;
 
     /**
      * Исправлены опечатки.
      */
-    const QC_CORRECTED = 4;
-    
-    /**
-     * @var string Исходный email.
-     */
-    public $source;
-    
-    /**
-     * @var string Стандартизованный email.
-     */
-    public $email;
+    public const QC_CORRECTED = 4;
 
-    public function __toString()
+    /**
+     * @var string|null Исходный email.
+     */
+    public ?string $source = null;
+
+    /**
+     * @var string|null Стандартизованный email.
+     */
+    public ?string $email = null;
+
+    public function __toString(): string
     {
         return (string) $this->email;
     }

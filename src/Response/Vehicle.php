@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
 class Vehicle extends AbstractResponse
@@ -7,34 +9,34 @@ class Vehicle extends AbstractResponse
     /**
      * Исходное значение распознано уверенно.
      */
-    const QC_OK = 0;
+    public const QC_OK = 0;
 
     /**
      * Исходное значение распознано с допущениями или не распознано.
      */
-    const QC_INVALID = 1;
+    public const QC_INVALID = 1;
 
     /**
      * Исходное значение пустое или заведомо «мусорное».
      */
-    const QC_EMPTY = 2;
-    
-    /**
-     * @var string Стандартизованное значение.
-     */
-    public $result;
+    public const QC_EMPTY = 2;
 
     /**
-     * @var string Марка.
+     * @var string|null Стандартизованное значение.
      */
-    public $brand;
+    public ?string $result = null;
 
     /**
-     * @var string Модель.
+     * @var string|null Марка.
      */
-    public $model;
+    public ?string $brand = null;
 
-    public function __toString()
+    /**
+     * @var string|null Модель.
+     */
+    public ?string $model = null;
+
+    public function __toString(): string
     {
         return (string) $this->result;
     }

@@ -1,25 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coolycow\Dadata\Response;
 
+/**
+ * Идентификатор города по справочнику СДЭК.
+ */
 class Cdek extends AbstractResponse
 {
     /**
-     * @var string КЛАДР-код города.
+     * @var string|null КЛАДР-код города.
      */
-    public $kladr_id;
+    public ?string $kladr_id = null;
 
     /**
-     * @var string ФИАС-код города.
+     * @var string|null ФИАС-код города.
      */
-    public $fias_id;
+    public ?string $fias_id = null;
 
     /**
-     * @var string Идентификатор города по справочнику СДЭК.
+     * @var string|null Идентификатор города по справочнику СДЭК.
      */
-    public $cdek_id;
+    public ?string $cdek_id = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->cdek_id;
     }
