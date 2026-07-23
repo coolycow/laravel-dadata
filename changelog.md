@@ -3,7 +3,8 @@
 ## 2.1.0
 
 - Поддержка Laravel 13 (`illuminate/support ^13.0`, `orchestra/testbench ^11.0`)
-- CI matrix: Laravel 13 на PHP 8.3+
+- CI matrix: Laravel 10–13 с явным маппингом Testbench; для EOL L10/L11 отключён Composer advisory block
+- Минимальные версии Testbench: `^8.37|^9.17|^10.11|^11.0`
 
 ## 2.0.0
 
